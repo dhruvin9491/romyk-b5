@@ -202,7 +202,7 @@ button {
 /* auth pages */
 .auth_page {
     min-height: 760px;
-    padding: 150px 20px 80px;
+    padding: 80px 20px;
     display: flex;
     align-items: flex-start;
     justify-content: center;

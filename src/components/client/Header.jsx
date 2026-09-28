@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { CLIENT_ROUTE } from '../../constants/routeConstant';
 
 function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -21,7 +20,7 @@ function Header() {
         <header>
             <div className="container">
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                    <Link className="navbar-brand" to={CLIENT_ROUTE.HOME} onClick={() => setMenuOpen(false)}><img src="/assets/images/logo.png" alt="Romyk Ice Cream" /></Link>
+                    <Link className="navbar-brand" to="/" onClick={() => setMenuOpen(false)}><img src="/assets/images/logo.png" alt="Romyk Ice Cream" /></Link>
                     <button className="navbar-toggler" type="button" onClick={() => setMenuOpen((open) => !open)} aria-controls="navbarSupportedContent" aria-expanded={menuOpen} aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon" />
                     </button>

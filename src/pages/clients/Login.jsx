@@ -1,19 +1,31 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Button from '../../components/common/Button';
 import InputField from '../../components/common/InputField';
+import { toast } from 'react-toastify';
 
 function Login() {
+    const navigate = useNavigate();
+
     const formik = useFormik({
         initialValues: { email: '', password: '' },
         validationSchema: Yup.object({
             email: Yup.string().email('Enter a valid email').required('Email is required'),
-            password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required')
+            password: Yup.string().required('Password is required')
         }),
         onSubmit: (values) => {
-            console.log('login form submitted', values);
+            const users = JSON.parse(localStorage.getItem("users") || "[]");
+
+            const index = users.findIndex((user) => user.email === values.email);
+
+            if (index === -1 || users[index].password !== values.password) return toast.error("Invalid email or password");
+
+            if(users[index].isDeleted) return toast.info("You account has been deleted. Contact to romyk.support@gmail.com");
+
+            toast.success("Login successfully");
+            navigate("/");
         }
     });
 

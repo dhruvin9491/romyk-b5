@@ -1,11 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Button from '../../components/common/Button';
 import InputField from '../../components/common/InputField';
+import { toast } from 'react-toastify';
 
 function Register() {
+    const navigate = useNavigate();
+
     const formik = useFormik({
         initialValues: { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' },
         validationSchema: Yup.object({
@@ -16,7 +19,28 @@ function Register() {
             confirmPassword: Yup.string().oneOf([Yup.ref('password')], 'Passwords must match').required('Please confirm your password')
         }),
         onSubmit: (values) => {
-            console.log('register form submitted', values);
+            const users = JSON.parse(localStorage.getItem("users") || "[]");
+            
+            const index = users.findIndex((user) => user.email === values.email);
+
+            if(index !== -1) return toast.error("Email already in user");
+
+            const newUser = {
+                ...values,
+                id: crypto.randomUUID(),
+                isDeleted: false,
+                isActive: false,
+                createdAt: new Date().toLocaleString(),
+                updatedAt: new Date().toLocaleString(),
+                deletedAt: new Date().toLocaleString()
+            }
+
+            users.push(newUser);
+
+            localStorage.setItem("users", JSON.stringify(users));
+            
+            toast.success("Registration successfully");
+            navigate("/login");
         }
     });
 

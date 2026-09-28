@@ -10,10 +10,12 @@ import Blog from './pages/clients/Blog';
 import Contact from './pages/clients/Contact';
 import Login from './pages/clients/Login';
 import Register from './pages/clients/Register';
+import { ToastContainer } from 'react-toastify';
 
 function App(props) {
   return (
     <BrowserRouter>
+      <ToastContainer />
       <Header />
       <Routes>
         <Route path={"/"} element={<Home />} />
