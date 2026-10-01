@@ -1,33 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from './pages/clients/Home';
-import About from './pages/clients/About';
-import Cream from './pages/clients/Cream';
-import Header from './components/client/Header';
-import Footer from './components/client/Footer';
-import Service from './pages/clients/Service';
-import Blog from './pages/clients/Blog';
-import Contact from './pages/clients/Contact';
 import Login from './pages/clients/Login';
 import Register from './pages/clients/Register';
 import { ToastContainer } from 'react-toastify';
+import { createAdmin, getLoginCredential } from './helpers/authHelper';
+import ClientRoutes from './routes/ClientRoutes';
+import AdminRoutes from './routes/AdminRoutes';
+import PrivateRoutes from './routes/PrivateRoutes';
+import { ROLE } from './constants/commonConstants';
 
 function App(props) {
+  useEffect(() => {
+    createAdmin();
+  }, []);
+
   return (
     <BrowserRouter>
       <ToastContainer />
-      <Header />
       <Routes>
-        <Route path={"/"} element={<Home />} />
-        <Route path={"/about"} element={<About />} />
-        <Route path={"/icecream"} element={<Cream />} />
-        <Route path={"/services"} element={<Service />} />
-        <Route path={"/blog"} element={<Blog />} />
-        <Route path={"/contact"} element={<Contact />} />
         <Route path={"/login"} element={<Login />} />
         <Route path={"/register"} element={<Register />} />
+        <Route element={<PrivateRoutes role={[ROLE.USER, ROLE.ADMIN]} />}>
+          <Route path={'/*'} element={<ClientRoutes />} />
+        </Route>
+        <Route element={<PrivateRoutes role={[ROLE.ADMIN]} />}>
+          <Route path={'/admin/*'} element={<AdminRoutes />} />
+        </Route>
       </Routes>
-      <Footer />
     </BrowserRouter>
   );
 }

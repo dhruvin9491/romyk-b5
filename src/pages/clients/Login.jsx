@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import Button from '../../components/common/Button';
 import InputField from '../../components/common/InputField';
 import { toast } from 'react-toastify';
+import { ROLE } from '../../constants/commonConstants';
 
 function Login() {
     const navigate = useNavigate();
@@ -24,8 +25,10 @@ function Login() {
 
             if(users[index].isDeleted) return toast.info("You account has been deleted. Contact to romyk.support@gmail.com");
 
+            localStorage.setItem("login_credential", JSON.stringify(users[index]));
+
             toast.success("Login successfully");
-            navigate("/");
+            navigate(users[index].role === ROLE.ADMIN ? "/admin/dashboard" : "/");
         }
     });
 

@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import Button from '../../components/common/Button';
 import InputField from '../../components/common/InputField';
 import { toast } from 'react-toastify';
+import { ROLE } from '../../constants/commonConstants';
 
 function Register() {
     const navigate = useNavigate();
@@ -23,10 +24,11 @@ function Register() {
             
             const index = users.findIndex((user) => user.email === values.email);
 
-            if(index !== -1) return toast.error("Email already in user");
+            if(index !== -1) return toast.error("Email already in use");
 
             const newUser = {
                 ...values,
+                role: ROLE.USER,
                 id: crypto.randomUUID(),
                 isDeleted: false,
                 isActive: false,

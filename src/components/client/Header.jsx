@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { checkLoginStatus, logout } from '../../helpers/authHelper';
 
-function Header() {
+function Header({ credential }) {
     const [menuOpen, setMenuOpen] = useState(false);
     const location = useLocation();
-
     const navItems = [
         { label: 'Home', to: '/' },
         { label: 'About', to: '/about' },
@@ -33,15 +33,30 @@ function Header() {
                             ))}
                         </ul>
                         <form className="form-inline my-2 my-lg-0">
-                            <div className="login_bt">
-                                <Link to="/login">
-                                    Login{" "}
-                                    <span style={{ color: '#222222' }}>
-                                        <i className="fa fa-user" aria-hidden="true" />
-                                    </span>
-                                </Link>
-                            </div>
-                            <div className="fa fa-search form-control-feedback" />
+                            {checkLoginStatus() ?
+                                <>
+                                    <div className="login_bt">
+                                        <Link to="/profile" className='text-capitalize'>
+                                            {credential?.firstName} {credential?.lastName} {" "}
+                                            <span style={{ color: '#222222' }}>
+                                                <i className="fa fa-user" aria-hidden="true" />
+                                            </span>
+                                        </Link>
+                                    </div>
+                                    <button onClick={logout} type='button'>Logout</button>
+                                </>
+                                :
+                                <>
+                                    <div className="login_bt">
+                                        <Link to="/login" className='text-capitalize'>
+                                            login {" "}
+                                            <span style={{ color: '#222222' }}>
+                                                <i className="fa fa-user" aria-hidden="true" />
+                                            </span>
+                                        </Link>
+                                    </div>
+                                </>
+                            }
                         </form>
                     </div>
                 </nav>
